@@ -17,14 +17,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/sfprodisplay"
-            android:text="Today"
+            android:text="Tasks"
             android:textColor="@color/black"
             android:textSize="@dimen/_25ssp"
             android:textStyle="bold"
+            android:layout_marginLeft="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
