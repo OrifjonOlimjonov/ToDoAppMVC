@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import uz.orifjon.todoappmvc.databinding.FragmentMainBinding
 
 class MAinFragment : Fragment() {
@@ -15,6 +17,11 @@ class MAinFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater,container,false)
+
+
+        binding.btnAdd.setOnClickListener {
+
+        }
 
 
 
