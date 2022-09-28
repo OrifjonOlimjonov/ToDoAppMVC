@@ -32,7 +32,7 @@ class AddTaskFragment : Fragment() {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         date1 = ""
         date2 = ""
-        category = ""
+        category = "Work"
         binding.alarm.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
                 requireContext(),

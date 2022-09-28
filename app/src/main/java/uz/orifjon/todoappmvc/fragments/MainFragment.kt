@@ -35,8 +35,6 @@ class MAinFragment : Fragment() {
             alertDialog1.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             binding.AddTask.setOnClickListener { view1 ->
 
-
-
                 findNavController().navigate(R.id.addTaskFragment)
 
                 alertDialog1.dismiss()
