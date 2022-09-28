@@ -1,4 +1,4 @@
-package uz.orifjon.todoappmvc.models
+package uz.orifjon.todoappmvc.models.tasker
 
 
 import android.content.Context
@@ -15,7 +15,7 @@ abstract class TaskDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: TaskDatabase? = null
 
-        fun getDatabase(context: Context):TaskDatabase{
+        fun getDatabase(context: Context): TaskDatabase {
             val tempInstance = INSTANCE
             if(tempInstance != null){
                 return tempInstance

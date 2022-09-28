@@ -9,15 +9,11 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import uz.orifjon.todoappmvc.databinding.FragmentAddTaskBinding
-import uz.orifjon.todoappmvc.models.Task
-import uz.orifjon.todoappmvc.models.TaskDatabase
+import uz.orifjon.todoappmvc.models.tasker.Task
+import uz.orifjon.todoappmvc.models.tasker.TaskDatabase
 
 class AddTaskFragment : Fragment() {
 
@@ -42,7 +38,19 @@ class AddTaskFragment : Fragment() {
                         "$i:$i1",
                         Toast.LENGTH_LONG
                     ).show()
-                    date1 = "$i $i1"
+                    if(i > 9){
+                        date1 = if(i1 > 9) {
+                            "$i $i1"
+                        }else{
+                            "$i 0$i1"
+                        }
+                    }else{
+                        if(i1 > 9) {
+                            date1 = "0$i $i1"
+                        }else{
+                            date1 = "0$i 0$i1"
+                        }
+                    }
 
                 }, 12, 12, true
             )
@@ -57,7 +65,19 @@ class AddTaskFragment : Fragment() {
                         "$i2 $i1 $i",
                         Toast.LENGTH_SHORT
                     ).show()
-                    date2 = "$i  $i1 $i2 $date1"
+                    if(i1 > 9) {
+                        if(i2 > 9){
+                            date2 = "$i  $i1 $i2 $date1"
+                        }else {
+                            date2 = "$i  $i1 0$i2 $date1"
+                        }
+                    }else{
+                        if(i2 > 9){
+                            date2 = "$i  0$i1 $i2 $date1"
+                        }else {
+                            date2 = "$i  0$i1 0$i2 $date1"
+                        }
+                    }
                 }, 2022, 11, 6
             )
             datePickerDialog.show()
@@ -77,7 +97,7 @@ class AddTaskFragment : Fragment() {
                     taskDescription = binding.editText1.text.toString(),
                     taskTime = date2,
                     taskCategory = category
-                )
+                ,check = 1)
                 TaskDatabase.getDatabase(requireContext()).taskDao().add(task)
                 Toast.makeText(requireContext(), "Saqlandi!!", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
@@ -87,13 +107,8 @@ class AddTaskFragment : Fragment() {
         }
 
 
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), callback)
+
+
 
         return binding.root
     }

@@ -1,4 +1,4 @@
-package uz.orifjon.todoappmvc.models
+package uz.orifjon.todoappmvc.models.tasker
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -13,5 +13,6 @@ data class Task(
     @ColumnInfo(name = "task_time")
     val taskTime:String,
     @ColumnInfo(name = "task_category")
-    val taskCategory:String
+    val taskCategory:String,
+    val check:Int
 )

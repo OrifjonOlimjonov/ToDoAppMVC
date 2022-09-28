@@ -6,13 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import uz.orifjon.todoappmvc.databinding.ItemTaskBinding
-import uz.orifjon.todoappmvc.models.Task
+import uz.orifjon.todoappmvc.models.tasker.Task
 
-class RecyclerViewAdapter(var list:ArrayList<Task>):ListAdapter<Task, RecyclerViewAdapter.VH>(MyDiffUtils()) {
+class RecyclerViewAdapter:ListAdapter<Task, RecyclerViewAdapter.VH>(MyDiffUtils()) {
 
-    inner class VH(binding: ItemTaskBinding):RecyclerView.ViewHolder(binding.root){
-            fun onBind(task: Task,position: Int){
-
+    inner class VH(var binding: ItemTaskBinding):RecyclerView.ViewHolder(binding.root){
+            fun onBind(task: Task, position: Int){
+                binding.tvTask.text = task.taskDescription
+                binding.time.text = timePerioad(task.taskTime)
+                binding.tvTime.text = "⏰ ${timePerioad(task.taskTime)} pm"
             }
     }
 
@@ -31,6 +33,15 @@ class RecyclerViewAdapter(var list:ArrayList<Task>):ListAdapter<Task, RecyclerVi
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-            holder.onBind(list[position],position)
+            holder.onBind(getItem(position),position)
+    }
+
+    external fun timePerioad(time1:String):String
+
+
+    companion object {
+        init {
+            System.loadLibrary("todoappmvc")
+        }
     }
 }

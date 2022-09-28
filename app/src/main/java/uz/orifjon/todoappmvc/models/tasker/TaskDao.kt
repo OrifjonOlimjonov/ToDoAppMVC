@@ -1,6 +1,7 @@
-package uz.orifjon.todoappmvc.models
+package uz.orifjon.todoappmvc.models.tasker
 
 import androidx.room.*
+import io.reactivex.rxjava3.core.Flowable
 
 @Dao
 interface TaskDao {
@@ -16,6 +17,6 @@ interface TaskDao {
     fun delete(task: Task)
 
     @Query("SELECT * FROM task")
-    fun list(): List<Task>
+    fun list(): Flowable<List<Task>>
 
 }
