@@ -16,12 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_5sdp"
             android:fontFamily="@font/sfprodisplay"
             android:text="Tasks"
             android:textColor="@color/black"
             android:textSize="@dimen/_25ssp"
             android:textStyle="bold"
-            android:layout_marginLeft="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,25 +36,53 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTask"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="horizontal"
-        tools:listitem="@layout/item_task"
-        app:layout_constraintBottom_toTopOf="@id/rvList"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintBottom_toTopOf="@id/frameLayout1"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvList"
+        <TextView
+            android:id="@+id/resultInfoTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Eslatmalar mavjud emas!!"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18ssp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_task" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        tools:listitem="@layout/item_category"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvTask" />
+        app:layout_constraintTop_toBottomOf="@id/frameLayout">
 
+        <TextView
+            android:id="@+id/resultInfoCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Eslatmalar mavjud emas!!"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_18ssp"  />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/item_category" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/btnAdd"

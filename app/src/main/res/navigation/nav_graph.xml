@@ -10,4 +10,9 @@
         android:name="uz.orifjon.todoappmvc.fragments.MAinFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/addTaskFragment"
+        android:name="uz.orifjon.todoappmvc.fragments.AddTaskFragment"
+        android:label="fragment_add_task"
+        tools:layout="@layout/fragment_add_task" />
 </navigation>
