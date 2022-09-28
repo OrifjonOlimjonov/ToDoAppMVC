@@ -78,10 +78,11 @@ class AddTaskFragment : Fragment() {
                     taskTime = date2,
                     taskCategory = category
                 )
-
                 TaskDatabase.getDatabase(requireContext()).taskDao().add(task)
                 Toast.makeText(requireContext(), "Saqlandi!!", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
+                findNavController().popBackStack()
+            }else{
+                Toast.makeText(requireContext(), "OOOOOOMMMMMMMMMMMGGGGGGG!", Toast.LENGTH_SHORT).show()
             }
         }
 

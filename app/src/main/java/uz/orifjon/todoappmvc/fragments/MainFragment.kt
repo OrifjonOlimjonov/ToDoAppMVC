@@ -11,8 +11,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import uz.orifjon.todoappmvc.R
+import uz.orifjon.todoappmvc.databinding.CategoryDialogBinding
 import uz.orifjon.todoappmvc.databinding.DialogBinding
 import uz.orifjon.todoappmvc.databinding.FragmentMainBinding
+import uz.orifjon.todoappmvc.models.TaskDatabase
 import uz.orifjon.todoappmvc.timer.BataTime
 
 class MAinFragment : Fragment() {
@@ -33,14 +35,29 @@ class MAinFragment : Fragment() {
             alertDialog1.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             binding.AddTask.setOnClickListener { view1 ->
 
+
+
                 findNavController().navigate(R.id.addTaskFragment)
 
                 alertDialog1.dismiss()
             }
             binding.AddList.setOnClickListener { view12 ->
 
+                val alertDialog2 = android.app.AlertDialog.Builder(requireContext())
+                val binding = CategoryDialogBinding.inflate(layoutInflater)
+                alertDialog2.setView(binding.root)
+                val alertDialog3 = alertDialog2.create()
+                alertDialog3.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                binding.btnCancel.setOnClickListener {
+                    // TaskDatabase.getDatabase(requireContext()).taskDao().add()
+                  //  findNavController().popBackStack()
+                    alertDialog3.dismiss()
+                }
+                binding.btnAdd.setOnClickListener {
+                    alertDialog3.dismiss()
+                }
+                alertDialog3.show()
 
-                alertDialog1.dismiss()
             }
             alertDialog1.show()
         }
