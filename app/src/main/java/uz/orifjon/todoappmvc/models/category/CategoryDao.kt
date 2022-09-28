@@ -16,7 +16,7 @@ interface CategoryDao {
     fun delete(category: Category)
 
     @Query("SELECT * FROM category")
-    fun list():Flowable<List<String>>
+    fun list():Flowable<List<Category>>
 
 
 }
