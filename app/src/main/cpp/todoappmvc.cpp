@@ -57,7 +57,10 @@ Java_uz_orifjon_todoappmvc_adapters_RecyclerViewAdapter_timePerioad(JNIEnv *env,
 
     string timeBefore = stringParse(env, time1);
 
+    string hour = timeNow.substr(11,2);
+    string minute = timeNow.substr(14,2);
     // Mon Oct  2 00:59:08 2017
-    // 0 3 4 3
-    return env->NewStringUTF(timeBefore.c_str());
+    // 012345678901234567890123
+    string time = hour + ":" + minute;
+    return env->NewStringUTF(time.c_str());
 }

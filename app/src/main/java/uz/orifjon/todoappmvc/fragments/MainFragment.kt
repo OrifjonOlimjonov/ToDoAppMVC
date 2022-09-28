@@ -12,8 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import uz.orifjon.todoappmvc.R
 import uz.orifjon.todoappmvc.adapters.RecyclerViewAdapter
+import uz.orifjon.todoappmvc.adapters.RecyclerViewCategoryAdapter
 import uz.orifjon.todoappmvc.databinding.CategoryDialogBinding
 import uz.orifjon.todoappmvc.databinding.DialogBinding
 import uz.orifjon.todoappmvc.databinding.FragmentMainBinding
@@ -27,6 +31,7 @@ class MAinFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var adapter: RecyclerViewAdapter
+    private lateinit var adapterCategory: RecyclerViewCategoryAdapter
     private lateinit var list: ArrayList<Task>
     private lateinit var listCategory: ArrayList<Category>
     override fun onCreateView(
@@ -35,17 +40,36 @@ class MAinFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         adapter = RecyclerViewAdapter()
-        list = arrayListOf(Task(taskDescription = "sa", taskTime = "2002 12 12 12 12", check = 1, taskCategory = "Work"))
-        adapter.submitList(list)
+        adapterCategory = RecyclerViewCategoryAdapter()
+        binding.rvList.adapter = adapterCategory
         binding.rvTask.adapter = adapter
-       TaskDatabase.getDatabase(requireContext()).taskDao().list()
+        list = arrayListOf(
+            Task(
+                taskDescription = "sa",
+                taskTime = "2002 12 12 12 12",
+                check = 1,
+                taskCategory = "Work"
+            )
+        )
+        listCategory = arrayListOf(Category(0,"salom",1))
+
+        GlobalScope.launch(Dispatchers.Main) {
+            if (listCategory.isNotEmpty()) binding.resultInfoCategory.visibility = View.INVISIBLE
+            else binding.resultInfoCategory.visibility = View.VISIBLE
+            if(list.isNotEmpty()) binding.resultInfoTask.visibility = View.INVISIBLE
+            else binding.resultInfoTask.visibility = View.VISIBLE
+        }
+        TaskDatabase.getDatabase(requireContext()).taskDao().list()
             .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
             .subscribe {
                 list = it as ArrayList<Task> /* = java.util.ArrayList<uz.orifjon.todoappmvc.models.tasker.Task> */
+                adapter.submitList(list)
             }
-        CategoryDatabase.getDatabase(requireContext()).categoryDao().list().subscribeOn(AndroidSchedulers.mainThread()).
-        observeOn(Schedulers.io()).subscribe {
+        CategoryDatabase.getDatabase(requireContext()).categoryDao().list()
+            .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+            .subscribe {
             listCategory = it as ArrayList<Category> /* = java.util.ArrayList<uz.orifjon.todoappmvc.models.category.Category> */
+                adapterCategory.submitList(listCategory)
         }
         binding.btnAdd.setOnClickListener {
             val alertDialog = AlertDialog.Builder(requireContext())
@@ -54,16 +78,17 @@ class MAinFragment : Fragment() {
             val alertDialog1 = alertDialog.create()
             alertDialog1.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             binding.AddTask.setOnClickListener { view1 ->
-                if (listCategory.isEmpty()){
+                if (listCategory.isEmpty()) {
                     Toast.makeText(requireContext(), "Category not found", Toast.LENGTH_SHORT).show()
-                }else {
+                } else {
+                    this.binding.resultInfoCategory.visibility = View.INVISIBLE
                     findNavController().navigate(R.id.addTaskFragment)
                     alertDialog1.dismiss()
                 }
             }
-            
+
             binding.AddList.setOnClickListener { view12 ->
-                 
+
                 val alertDialog2 = AlertDialog.Builder(requireContext())
                 val binding = CategoryDialogBinding.inflate(layoutInflater)
                 alertDialog2.setView(binding.root)
@@ -77,8 +102,9 @@ class MAinFragment : Fragment() {
                 binding.btnAdd.setOnClickListener {
 
                     val name = binding.input.text.toString()
-                    val category = Category(name = name)
+                    val category = Category(name = name, size = 0)
                     CategoryDatabase.getDatabase(requireContext()).categoryDao().add(category)
+                    listCategory.add(category)
                     //TODO : Category dialog
                     alertDialog3.dismiss()
                 }
