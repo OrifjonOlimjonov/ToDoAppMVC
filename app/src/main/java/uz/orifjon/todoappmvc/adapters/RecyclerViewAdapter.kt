@@ -13,8 +13,8 @@ class RecyclerViewAdapter:ListAdapter<Task, RecyclerViewAdapter.VH>(MyDiffUtils(
     inner class VH(var binding: ItemTaskBinding):RecyclerView.ViewHolder(binding.root){
             fun onBind(task: Task, position: Int){
                 binding.tvTask.text = task.taskDescription
-                binding.time.text = timePerioad(task.taskTime)
-                binding.tvTime.text = timePerioad(task.taskTime)
+                binding.time.text =timePerioad(task.taskTime)
+                binding.tvTime.text = task.taskTime
             }
     }
 

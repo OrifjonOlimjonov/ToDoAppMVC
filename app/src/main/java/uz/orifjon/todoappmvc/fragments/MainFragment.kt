@@ -40,7 +40,9 @@ class MAinFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         adapter = RecyclerViewAdapter()
-        adapterCategory = RecyclerViewCategoryAdapter()
+        adapterCategory = RecyclerViewCategoryAdapter(){
+
+        }
         binding.rvList.adapter = adapterCategory
         binding.rvTask.adapter = adapter
         list = arrayListOf(
@@ -51,7 +53,7 @@ class MAinFragment : Fragment() {
                 taskCategory = "Work"
             )
         )
-        listCategory = arrayListOf(Category(0,"salom",1))
+        listCategory = arrayListOf()
 
         GlobalScope.launch(Dispatchers.Main) {
             if (listCategory.isNotEmpty()) binding.resultInfoCategory.visibility = View.INVISIBLE
@@ -60,13 +62,15 @@ class MAinFragment : Fragment() {
             else binding.resultInfoTask.visibility = View.VISIBLE
         }
         TaskDatabase.getDatabase(requireContext()).taskDao().list()
-            .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
             .subscribe {
                 list = it as ArrayList<Task> /* = java.util.ArrayList<uz.orifjon.todoappmvc.models.tasker.Task> */
                 adapter.submitList(list)
             }
         CategoryDatabase.getDatabase(requireContext()).categoryDao().list()
-            .subscribeOn(AndroidSchedulers.mainThread()).observeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
             .subscribe {
             listCategory = it as ArrayList<Category> /* = java.util.ArrayList<uz.orifjon.todoappmvc.models.category.Category> */
                 adapterCategory.submitList(listCategory)

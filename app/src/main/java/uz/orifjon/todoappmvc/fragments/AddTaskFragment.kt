@@ -11,7 +11,15 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
+import uz.orifjon.todoappmvc.adapters.RecyclerViewAdapter
+import uz.orifjon.todoappmvc.adapters.RecyclerViewCategoryAdapter
+import uz.orifjon.todoappmvc.databinding.BottomsheetBinding
 import uz.orifjon.todoappmvc.databinding.FragmentAddTaskBinding
+import uz.orifjon.todoappmvc.models.category.Category
+import uz.orifjon.todoappmvc.models.category.CategoryDatabase
 import uz.orifjon.todoappmvc.models.tasker.Task
 import uz.orifjon.todoappmvc.models.tasker.TaskDatabase
 
@@ -21,6 +29,8 @@ class AddTaskFragment : Fragment() {
     private lateinit var date1: String
     private lateinit var date2: String
     private lateinit var category: String
+    private lateinit var listCategory: ArrayList<Category>
+    private lateinit var adapter: RecyclerViewCategoryAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,7 +38,8 @@ class AddTaskFragment : Fragment() {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         date1 = ""
         date2 = ""
-        category = "Work"
+        category = ""
+        listCategory = arrayListOf()
         binding.alarm.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
                 requireContext(),
@@ -38,16 +49,16 @@ class AddTaskFragment : Fragment() {
                         "$i:$i1",
                         Toast.LENGTH_LONG
                     ).show()
-                    if(i > 9){
-                        date1 = if(i1 > 9) {
+                    if (i > 9) {
+                        date1 = if (i1 > 9) {
                             "$i $i1"
-                        }else{
+                        } else {
                             "$i 0$i1"
                         }
-                    }else{
-                        if(i1 > 9) {
+                    } else {
+                        if (i1 > 9) {
                             date1 = "0$i $i1"
-                        }else{
+                        } else {
                             date1 = "0$i 0$i1"
                         }
                     }
@@ -65,16 +76,16 @@ class AddTaskFragment : Fragment() {
                         "$i2 $i1 $i",
                         Toast.LENGTH_SHORT
                     ).show()
-                    if(i1 > 9) {
-                        if(i2 > 9){
+                    if (i1 > 9) {
+                        if (i2 > 9) {
                             date2 = "$i  $i1 $i2 $date1"
-                        }else {
+                        } else {
                             date2 = "$i  $i1 0$i2 $date1"
                         }
-                    }else{
-                        if(i2 > 9){
+                    } else {
+                        if (i2 > 9) {
                             date2 = "$i  0$i1 $i2 $date1"
-                        }else {
+                        } else {
                             date2 = "$i  0$i1 0$i2 $date1"
                         }
                     }
@@ -84,6 +95,25 @@ class AddTaskFragment : Fragment() {
         }
 
         binding.category.setOnClickListener {
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+            val binding: BottomsheetBinding = BottomsheetBinding.inflate(layoutInflater)
+            adapter = RecyclerViewCategoryAdapter {
+                category = it.name
+                bottomSheetDialog.dismiss()
+            }
+            binding.rv.adapter = adapter
+            CategoryDatabase.getDatabase(requireContext()).categoryDao().list()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    listCategory =
+                        it as ArrayList<Category> /* = java.util.ArrayList<uz.orifjon.todoappmvc.models.category.Category> */
+                    adapter.submitList(listCategory)
+                }
+            bottomSheetDialog.setContentView(binding.root)
+            bottomSheetDialog.setCancelable(true)
+            bottomSheetDialog.show()
+            bottomSheetDialog.setOnCancelListener { }
             Toast.makeText(requireContext(), date2, Toast.LENGTH_SHORT).show()
         }
 
@@ -96,13 +126,14 @@ class AddTaskFragment : Fragment() {
                 val task = Task(
                     taskDescription = binding.editText1.text.toString(),
                     taskTime = date2,
-                    taskCategory = category
-                ,check = 1)
+                    taskCategory = category, check = 1
+                )
                 TaskDatabase.getDatabase(requireContext()).taskDao().add(task)
                 Toast.makeText(requireContext(), "Saqlandi!!", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
-            }else{
-                Toast.makeText(requireContext(), "OOOOOOMMMMMMMMMMMGGGGGGG!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "OOOOOOMMMMMMMMMMMGGGGGGG!", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
