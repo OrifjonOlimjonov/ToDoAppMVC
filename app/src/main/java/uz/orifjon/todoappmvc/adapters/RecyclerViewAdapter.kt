@@ -14,7 +14,7 @@ class RecyclerViewAdapter:ListAdapter<Task, RecyclerViewAdapter.VH>(MyDiffUtils(
             fun onBind(task: Task, position: Int){
                 binding.tvTask.text = task.taskDescription
                 binding.time.text = timePerioad(task.taskTime)
-                binding.tvTime.text = "⏰ ${timePerioad(task.taskTime)} pm"
+                binding.tvTime.text = timePerioad(task.taskTime)
             }
     }
 

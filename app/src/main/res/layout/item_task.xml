@@ -32,9 +32,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:orientation="vertical"
         android:layout_marginLeft="@dimen/_4sdp"
+        app:layout_constraintRight_toLeftOf="@id/color"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btnRadio"
@@ -57,6 +58,7 @@
             android:text="⏰ 07:00 pm"
             android:ellipsize="end"
             android:maxLength="25"
+            android:textSize="@dimen/_12ssp"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -64,14 +66,12 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/color"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:checked="true"
-        app:cardCornerRadius="@dimen/_30sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/btnRadio" />
 </androidx.constraintlayout.widget.ConstraintLayout>

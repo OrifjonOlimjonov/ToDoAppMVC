@@ -59,5 +59,5 @@ Java_uz_orifjon_todoappmvc_adapters_RecyclerViewAdapter_timePerioad(JNIEnv *env,
 
     // Mon Oct  2 00:59:08 2017
     // 0 3 4 3
-
+    return env->NewStringUTF(timeBefore.c_str());
 }
