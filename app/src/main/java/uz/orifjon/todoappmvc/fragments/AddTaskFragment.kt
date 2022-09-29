@@ -28,7 +28,7 @@ class AddTaskFragment : Fragment() {
     private lateinit var binding: FragmentAddTaskBinding
     private lateinit var date1: String
     private lateinit var date2: String
-    private lateinit var category: String
+    private lateinit var category: Category
     private lateinit var listCategory: ArrayList<Category>
     private lateinit var adapter: RecyclerViewCategoryAdapter
     override fun onCreateView(
@@ -38,7 +38,7 @@ class AddTaskFragment : Fragment() {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         date1 = ""
         date2 = ""
-        category = ""
+        category = Category(0,"",0)
         listCategory = arrayListOf()
         binding.alarm.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
@@ -98,7 +98,7 @@ class AddTaskFragment : Fragment() {
             val bottomSheetDialog = BottomSheetDialog(requireContext())
             val binding: BottomsheetBinding = BottomsheetBinding.inflate(layoutInflater)
             adapter = RecyclerViewCategoryAdapter {
-                category = it.name
+                category = it
                 bottomSheetDialog.dismiss()
             }
             binding.rv.adapter = adapter
@@ -122,13 +122,15 @@ class AddTaskFragment : Fragment() {
         }
 
         binding.btnSave.setOnClickListener {
-            if (date2 != "" && category != "") {
+            if (date2 != "" && category.name != "") {
                 val task = Task(
                     taskDescription = binding.editText1.text.toString(),
                     taskTime = date2,
-                    taskCategory = category, check = 1
+                    taskCategory = category.name, check = 1
                 )
                 TaskDatabase.getDatabase(requireContext()).taskDao().add(task)
+                category.size++
+                CategoryDatabase.getDatabase(requireContext()).categoryDao().update(category)
                 Toast.makeText(requireContext(), "Saqlandi!!", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             } else {
